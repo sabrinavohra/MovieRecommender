@@ -18,6 +18,14 @@ public class Movie {
         this.poster = poster;
     }
 
+    public Movie(String name, int length, int budget, String genre, String overview) {
+        this.name = name;
+        this.length = length;
+        this.budget = budget;
+        this.genre = genre;
+        this.overview = overview;
+    }
+
     public Movie(int length, int budget, String genre) {
         this.length = length;
         this.budget = budget;

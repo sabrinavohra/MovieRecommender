@@ -8,10 +8,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class tester {
-    private static ArrayList<Movie> movieList = new ArrayList<Movie>();
+    private static ArrayList<Movie> movieList = new ArrayList<>();
+    private static Movie test;
 
     public static void main(String[] args) throws TmdbException {
+        test = new Movie("Sabrina", 90, 0, "Romantic Comedy", "good movie" );
         Scanner input = new Scanner(System.in);
+        load();
         System.out.println("How long would you like your movie to be?");
         int len = input.nextInt();
         System.out.println("What should the budget be?");
@@ -33,6 +36,9 @@ public class tester {
                 current = movieList.get(i);
             }
         }
+        if(current == null) {
+            return test;
+        }
         return current;
     }
 
@@ -50,11 +56,10 @@ public class tester {
         return total;
     }
 
-    public void load () throws TmdbException {
+    public static void load() throws TmdbException {
         TmdbApi tmdbApi = new TmdbApi("eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMDkwNjk5ZGE1ODg4ZGI5MjE1ZGNmMGNhMjgwZDZmYiIsIm5iZiI6MTc0MzE5MjczMi42ODUsInN1YiI6IjY3ZTcwMjljMDkyNTI4NjJlYTc2N2U4NSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Q08Y593tZg-jbJ1WUG5Q5QV4Wc_NeCiZ4nM9x0JHb3A");
         TmdbMovies tmdbMovies = tmdbApi.getMovies();
-        MovieDb movie = tmdbMovies.getDetails(5353, "en-US");
-        System.out.println(movie);
+        //MovieDb movie = tmdbMovies.getDetails(5353, "en-US");
         for(int i = 5000; i < 10000; i++) {
             MovieDb current = tmdbMovies.getDetails(i, "en-US", MovieAppendToResponse.IMAGES);
             Movie movie2 = new Movie(current.getTitle(), current.getRuntime(), current.getBudget(), current.getGenres().getFirst(), current.getOverview(), current.getImages());
