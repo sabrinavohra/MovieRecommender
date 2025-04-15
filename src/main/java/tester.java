@@ -56,6 +56,7 @@ public class tester {
             total++;
         }
         return total;
+
     }
 
     public static void load() throws TmdbException {
@@ -63,10 +64,11 @@ public class tester {
         TmdbMovies tmdbMovies = tmdbApi.getMovies();
         //MovieDb movie = tmdbMovies.getDetails(5353, "en-US");
         // How to figure out range of movie id values?
-        for(int i = 10000; i < 100000; i++) {
+        for(int i = 0; i < 2147483647; i++) {
             MovieDb current = tmdbMovies.getDetails(i, "en-US", MovieAppendToResponse.IMAGES);
             Movie movie2 = new Movie(current.getTitle(), current.getRuntime(), current.getBudget(), current.getGenres().getFirst(), current.getOverview(), current.getImages());
             movieList.add(movie2);
+            System.out.println(movie2);
         }
     }
 }
