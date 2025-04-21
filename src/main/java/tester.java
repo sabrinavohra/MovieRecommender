@@ -82,6 +82,9 @@ public class tester {
     }
 
     public static void loadIDs() throws IOException, InterruptedException {
+        TmdbApi tmdbApi = new TmdbApi("eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMDkwNjk5ZGE1ODg4ZGI5MjE1ZGNmMGNhMjgwZDZmYiIsIm5iZiI6MTc0MzE5MjczMi42ODUsInN1YiI6IjY3ZTcwMjljMDkyNTI4NjJlYTc2N2U4NSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Q08Y593tZg-jbJ1WUG5Q5QV4Wc_NeCiZ4nM9x0JHb3A");
+        TmdbMovies tmdbMovies = tmdbApi.getMovies();
+        //MovieDb movie = tmdbMovies.getDetails(5353, "en-US");
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc"))
                 .header("accept", "application/json")
@@ -90,6 +93,16 @@ public class tester {
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         System.out.println(response.body());
-        // Go through class or split String
+        String toUse = ",\"id\":";
+        String[] list = response.body().split(toUse);
+        String[] ids = new String[list.length];
+        for(int i = 0; i < list.length; i++) {
+            ids[i] = list[i].substring(0, 6);
+            System.out.println(ids[i]);
+        }
+        // Need to convert to Integer to call getDetails()
+        for(int i = 0; i < list.length; i++) {
+            tmdbMovies.getDetails(list[i]);
+        }
     }
 }
