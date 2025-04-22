@@ -54,6 +54,11 @@ public class tester {
 
     public static int editDistance(Movie a, Movie b) {
         // Use get similar method?
+        // The further you are, the fewer points you get
+        // Some categories worth more than less?
+        // Research or creative?
+            // Recommendation algorithms / matching algorithms
+            // Have fields in a record and which saved record is the most similar?
         int total = 0;
         if(Math.abs(a.getLength() - b.getLength()) <= 15) {
             total++;
@@ -81,7 +86,7 @@ public class tester {
 //        }
     }
 
-    public static void loadIDs() throws IOException, InterruptedException {
+    public static void loadIDs() throws IOException, InterruptedException, TmdbException {
         TmdbApi tmdbApi = new TmdbApi("eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMDkwNjk5ZGE1ODg4ZGI5MjE1ZGNmMGNhMjgwZDZmYiIsIm5iZiI6MTc0MzE5MjczMi42ODUsInN1YiI6IjY3ZTcwMjljMDkyNTI4NjJlYTc2N2U4NSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Q08Y593tZg-jbJ1WUG5Q5QV4Wc_NeCiZ4nM9x0JHb3A");
         TmdbMovies tmdbMovies = tmdbApi.getMovies();
         //MovieDb movie = tmdbMovies.getDetails(5353, "en-US");
@@ -92,17 +97,24 @@ public class tester {
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
+        //System.out.println(response.body());
         String toUse = ",\"id\":";
         String[] list = response.body().split(toUse);
         String[] ids = new String[list.length];
         for(int i = 0; i < list.length; i++) {
             ids[i] = list[i].substring(0, 6);
-            System.out.println(ids[i]);
         }
+        ids[0] = "0";
+        ids[10] = "0";
+
         // Need to convert to Integer to call getDetails()
-        for(int i = 0; i < list.length; i++) {
-            tmdbMovies.getDetails(list[i]);
+        Integer[] finalIds = new Integer[ids.length];
+        for(int i = 0; i < ids.length; i++) {
+            finalIds[i] = Integer.valueOf(ids[i]);
+//            MovieDb m = tmdbMovies.getDetails(finalIds[i], "en-US", MovieAppendToResponse.IMAGES);
+//            System.out.println(m);
         }
+        MovieDb m = tmdbMovies.getDetails(finalIds[1], "en-US");
+        System.out.println(m);
     }
 }
