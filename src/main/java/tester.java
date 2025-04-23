@@ -10,15 +10,18 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class tester {
     private static ArrayList<Movie> movieList = new ArrayList<>();
     private static Movie test;
     private static ArrayList<Integer> movieIDs;
+    private static ArrayList<Movie> movieDetails;
 
     public static void main(String[] args) throws TmdbException, IOException, InterruptedException {
         movieIDs = new ArrayList<>();
+        movieDetails = new ArrayList<>();
         test = new Movie("Sabrina", 90, 0, "Romantic Comedy", "good movie" );
         Scanner input = new Scanner(System.in);
         // Must fix load to have movies in movieList
@@ -67,10 +70,9 @@ public class tester {
             total++;
         }
         if(a.getGenre().equals(b.getGenre())) {
-            total++;
+            total+=2;
         }
         return total;
-
     }
 
     public static void load() throws TmdbException {
@@ -104,17 +106,30 @@ public class tester {
         for(int i = 0; i < list.length; i++) {
             ids[i] = list[i].substring(0, 6);
         }
-        ids[0] = "0";
-        ids[10] = "0";
+        ArrayList<String> convert = new ArrayList<>();
+        Collections.addAll(convert, ids);
+        convert.remove(0);
+        convert.remove(10);
+
+        String[] r = new String[convert.size()];
+        for(int i = 0; i < convert.size(); i++) {
+            r[i] = convert.get(i);
+            System.out.println(r[i]);
+        }
 
         // Need to convert to Integer to call getDetails()
         Integer[] finalIds = new Integer[ids.length];
-        for(int i = 0; i < ids.length; i++) {
-            finalIds[i] = Integer.valueOf(ids[i]);
-//            MovieDb m = tmdbMovies.getDetails(finalIds[i], "en-US", MovieAppendToResponse.IMAGES);
-//            System.out.println(m);
+        for(int i = 0; i < r.length; i++) {
+            finalIds[i] = Integer.valueOf(r[i]);
         }
-        MovieDb m = tmdbMovies.getDetails(finalIds[1], "en-US");
-        System.out.println(m);
+        for(int i = 0; i < finalIds.length; i++) {
+            // Fix IDs
+            MovieDb m = tmdbMovies.getDetails(finalIds[0], "en-US", MovieAppendToResponse.IMAGES);
+            Movie n = new Movie(m.getTitle(), m.getRuntime(), m.getBudget(), m.getGenres().getFirst(), m.getOverview(), m.getImages());
+            movieList.add(n);
+        }
+        for(int i = 0; i < movieList.size(); i++) {
+            System.out.println(movieList.get(i));
+        }
     }
 }
