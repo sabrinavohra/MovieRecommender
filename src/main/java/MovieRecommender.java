@@ -13,13 +13,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
-public class tester {
+public class MovieRecommender {
     private static ArrayList<Movie> movieList = new ArrayList<>();
     private static Movie test;
     private static ArrayList<Integer> movieIDs;
     private static ArrayList<Movie> movieDetails;
+    private static MovieRecommenderView view;
 
     public static void main(String[] args) throws TmdbException, IOException, InterruptedException {
+        view = new MovieRecommenderView();
+        view.repaint();
         movieIDs = new ArrayList<>();
         movieDetails = new ArrayList<>();
         test = new Movie("Sabrina", 90, 0, "Romantic Comedy", "good movie" );
@@ -114,7 +117,7 @@ public class tester {
         String[] r = new String[convert.size()];
         for(int i = 0; i < convert.size(); i++) {
             r[i] = convert.get(i);
-            System.out.println(r[i]);
+            //System.out.println(r[i]);
         }
 
         // Need to convert to Integer to call getDetails()
