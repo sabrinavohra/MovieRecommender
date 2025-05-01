@@ -8,6 +8,7 @@ public class MovieView2 extends JFrame {
     private JPanel inputPanel, goPanel;
 
     public MovieView2() {
+
         setTitle("Movie Recommender");
         setSize(1024, 825);
         setLocationRelativeTo(null);
@@ -18,7 +19,7 @@ public class MovieView2 extends JFrame {
         inputPanel = new JPanel(new GridBagLayout());
         inputPanel.setBackground(Color.LIGHT_GRAY); // for visibility
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(30, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
 
         // Genre
@@ -48,18 +49,24 @@ public class MovieView2 extends JFrame {
         // GO button
         goPanel = new JPanel();
         JButton goButton = new JButton("GO");
-        goButton.setPreferredSize(new Dimension(120, 40));
+        //goButton.setPreferredSize(new Dimension(250, 40));
         goButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showNextScreen();
             }
         });
-        goPanel.add(goButton);
+        gbc.gridx = 1;
+        gbc.gridy = 100;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        goButton.setPreferredSize(new Dimension(120, 60));
+        goButton.setBackground(Color.GREEN);
+        goButton.setForeground(Color.GREEN);
+        inputPanel.add(goButton, gbc);
+        goButton.setOpaque(true);
 
-        // Add panels to frame
         add(inputPanel, BorderLayout.CENTER);
-        add(goPanel, BorderLayout.SOUTH);
 
         setVisible(true);
     }
@@ -69,6 +76,14 @@ public class MovieView2 extends JFrame {
         JPanel whitePanel = new JPanel();
         whitePanel.setBackground(Color.WHITE);
         add(whitePanel);
+        JLabel genreLabel = new JLabel("Genre: " + genreField.getText());
+        JLabel lengthLabel = new JLabel("Length: " + lengthField.getText());
+        JLabel ratingLabel = new JLabel("Rating: " + ratingField.getText());
+
+        // Add labels to the panel
+        whitePanel.add(genreLabel);
+        whitePanel.add(lengthLabel);
+        whitePanel.add(ratingLabel);
         revalidate();
         repaint();
     }
