@@ -19,10 +19,12 @@ public class MovieRecommender {
     private static ArrayList<Integer> movieIDs;
     private static ArrayList<Movie> movieDetails;
     private static MovieRecommenderView view;
+    private static MovieView2 view2;
 
     public static void main(String[] args) throws TmdbException, IOException, InterruptedException {
-        view = new MovieRecommenderView();
-        view.repaint();
+        //view = new MovieRecommenderView();
+        view2 = new MovieView2();
+        view2.repaint();
         movieIDs = new ArrayList<>();
         movieDetails = new ArrayList<>();
         test = new Movie("Sabrina", 90, 0, "Romantic Comedy", "good movie" );
@@ -111,8 +113,9 @@ public class MovieRecommender {
         }
         ArrayList<String> convert = new ArrayList<>();
         Collections.addAll(convert, ids);
-        convert.remove(0);
+        convert.removeFirst();
         convert.remove(10);
+        convert.removeLast();
 
         String[] r = new String[convert.size()];
         for(int i = 0; i < convert.size(); i++) {
@@ -127,12 +130,9 @@ public class MovieRecommender {
         }
         for(int i = 0; i < finalIds.length; i++) {
             // Fix IDs
-            MovieDb m = tmdbMovies.getDetails(finalIds[0], "en-US", MovieAppendToResponse.IMAGES);
+            MovieDb m = tmdbMovies.getDetails(finalIds[1], "en-US", MovieAppendToResponse.IMAGES);
             Movie n = new Movie(m.getTitle(), m.getRuntime(), m.getBudget(), m.getGenres().getFirst(), m.getOverview(), m.getImages());
             movieList.add(n);
-        }
-        for(int i = 0; i < movieList.size(); i++) {
-            System.out.println(movieList.get(i));
         }
     }
 }
