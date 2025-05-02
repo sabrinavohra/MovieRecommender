@@ -72,20 +72,57 @@ public class MovieView2 extends JFrame {
     }
 
     private void showNextScreen() {
-        getContentPane().removeAll();
-        JPanel whitePanel = new JPanel();
-        whitePanel.setBackground(Color.WHITE);
-        add(whitePanel);
-        JLabel genreLabel = new JLabel("Genre: " + genreField.getText());
-        JLabel lengthLabel = new JLabel("Length: " + lengthField.getText());
-        JLabel ratingLabel = new JLabel("Rating: " + ratingField.getText());
+        private void showNextScreen() {
+            getContentPane().removeAll();
 
-        // Add labels to the panel
-        whitePanel.add(genreLabel);
-        whitePanel.add(lengthLabel);
-        whitePanel.add(ratingLabel);
-        revalidate();
-        repaint();
+            JPanel whitePanel = new JPanel();
+            whitePanel.setBackground(Color.WHITE);
+            whitePanel.setLayout(new BorderLayout());
+
+            // Top panel for text info
+            JPanel infoPanel = new JPanel();
+            infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+            infoPanel.setBackground(Color.WHITE);
+            infoPanel.add(new JLabel("Genre: " + genreField.getText()));
+            infoPanel.add(new JLabel("Length: " + lengthField.getText()));
+            infoPanel.add(new JLabel("Rating: " + ratingField.getText()));
+            whitePanel.add(infoPanel, BorderLayout.NORTH);
+
+            // Center panel for movie posters and titles
+            JPanel moviesPanel = new JPanel(new GridLayout(1, 3, 20, 10));
+            moviesPanel.setBackground(Color.WHITE);
+
+            // Example posters and labels
+            addMoviePoster(moviesPanel, "poster1.jpg", "Movie 1");
+            addMoviePoster(moviesPanel, "poster2.jpg", "Movie 2");
+            addMoviePoster(moviesPanel, "poster3.jpg", "Movie 3");
+
+            whitePanel.add(moviesPanel, BorderLayout.CENTER);
+
+            add(whitePanel);
+            revalidate();
+            repaint();
+        }
+
+// Helper method to add a poster and label
+        private void addMoviePoster(JPanel panel, String imagePath, String title) {
+            JPanel moviePanel = new JPanel();
+            moviePanel.setLayout(new BorderLayout());
+            moviePanel.setBackground(Color.WHITE);
+
+            try {
+                ImageIcon icon = new ImageIcon(imagePath);
+                Image img = icon.getImage().getScaledInstance(200, 300, Image.SCALE_SMOOTH);
+                JLabel imageLabel = new JLabel(new ImageIcon(img));
+                JLabel titleLabel = new JLabel(title, SwingConstants.CENTER);
+                moviePanel.add(imageLabel, BorderLayout.CENTER);
+                moviePanel.add(titleLabel, BorderLayout.SOUTH);
+            } catch (Exception e) {
+                moviePanel.add(new JLabel("Image not found"), BorderLayout.CENTER);
+            }
+
+            panel.add(moviePanel);
+        }
     }
 
     public static void main(String[] args) {
