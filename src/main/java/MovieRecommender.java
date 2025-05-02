@@ -106,21 +106,27 @@ public class MovieRecommender {
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         //System.out.println(response.body());
         String toUse = ",\"id\":";
+        // Fix IDs so if not able to parse through with integers then don't add to ID list
         String[] list = response.body().split(toUse);
         String[] ids = new String[list.length];
         for(int i = 0; i < list.length; i++) {
+            // How to check if number is only integers
+            String current = list[i].substring(0, 6);
+            int num = Integer.parseInt(current);
+
             ids[i] = list[i].substring(0, 6);
         }
         ArrayList<String> convert = new ArrayList<>();
         Collections.addAll(convert, ids);
         convert.removeFirst();
         convert.remove(10);
+        convert.remove(10);
         convert.removeLast();
 
         String[] r = new String[convert.size()];
         for(int i = 0; i < convert.size(); i++) {
             r[i] = convert.get(i);
-            //System.out.println(r[i]);
+           // System.out.println(r[i]);
         }
 
         // Need to convert to Integer to call getDetails()
@@ -130,9 +136,10 @@ public class MovieRecommender {
         }
         for(int i = 0; i < finalIds.length; i++) {
             // Fix IDs
-            MovieDb m = tmdbMovies.getDetails(finalIds[1], "en-US", MovieAppendToResponse.IMAGES);
+            MovieDb m = tmdbMovies.getDetails(finalIds[i], "en-US", MovieAppendToResponse.IMAGES);
             Movie n = new Movie(m.getTitle(), m.getRuntime(), m.getBudget(), m.getGenres().getFirst(), m.getOverview(), m.getImages());
             movieList.add(n);
+            System.out.println(movieList);
         }
     }
 }

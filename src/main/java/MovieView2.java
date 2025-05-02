@@ -8,7 +8,6 @@ public class MovieView2 extends JFrame {
     private JPanel inputPanel, goPanel;
 
     public MovieView2() {
-
         setTitle("Movie Recommender");
         setSize(1024, 825);
         setLocationRelativeTo(null);
@@ -72,39 +71,38 @@ public class MovieView2 extends JFrame {
     }
 
     private void showNextScreen() {
-        private void showNextScreen() {
-            getContentPane().removeAll();
+        getContentPane().removeAll();
 
-            JPanel whitePanel = new JPanel();
-            whitePanel.setBackground(Color.WHITE);
-            whitePanel.setLayout(new BorderLayout());
+        JPanel whitePanel = new JPanel();
+        whitePanel.setBackground(Color.PINK);
+        whitePanel.setLayout(new BorderLayout());
 
-            // Top panel for text info
-            JPanel infoPanel = new JPanel();
-            infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-            infoPanel.setBackground(Color.WHITE);
-            infoPanel.add(new JLabel("Genre: " + genreField.getText()));
-            infoPanel.add(new JLabel("Length: " + lengthField.getText()));
-            infoPanel.add(new JLabel("Rating: " + ratingField.getText()));
-            whitePanel.add(infoPanel, BorderLayout.NORTH);
+        // Top panel for text info
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.setBackground(Color.PINK);
+        infoPanel.add(new JLabel("Genre: " + genreField.getText()));
+        infoPanel.add(new JLabel("Length: " + lengthField.getText()));
+        infoPanel.add(new JLabel("Rating: " + ratingField.getText()));
+        whitePanel.add(infoPanel, BorderLayout.NORTH);
 
-            // Center panel for movie posters and titles
-            JPanel moviesPanel = new JPanel(new GridLayout(1, 3, 20, 10));
-            moviesPanel.setBackground(Color.WHITE);
+        // Center panel for movie posters and titles
+        JPanel moviesPanel = new JPanel(new GridLayout(1, 3, 20, 10));
+        moviesPanel.setBackground(Color.PINK);
 
-            // Example posters and labels
-            addMoviePoster(moviesPanel, "poster1.jpg", "Movie 1");
-            addMoviePoster(moviesPanel, "poster2.jpg", "Movie 2");
-            addMoviePoster(moviesPanel, "poster3.jpg", "Movie 3");
+        // Example posters and labels
+        addMoviePoster(moviesPanel, "poster1.jpg", "Movie 1");
+        addMoviePoster(moviesPanel, "poster2.jpg", "Movie 2");
+        addMoviePoster(moviesPanel, "poster3.jpg", "Movie 3");
 
-            whitePanel.add(moviesPanel, BorderLayout.CENTER);
+        whitePanel.add(moviesPanel, BorderLayout.CENTER);
 
-            add(whitePanel);
-            revalidate();
-            repaint();
-        }
+        add(whitePanel);
+        revalidate();
+        repaint();
+    }
 
-// Helper method to add a poster and label
+    // Helper method to add a poster and label
         private void addMoviePoster(JPanel panel, String imagePath, String title) {
             JPanel moviePanel = new JPanel();
             moviePanel.setLayout(new BorderLayout());
@@ -123,9 +121,8 @@ public class MovieView2 extends JFrame {
 
             panel.add(moviePanel);
         }
-    }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MovieView2());
+        MovieView2 current = new MovieView2();
     }
 }
