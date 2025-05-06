@@ -108,25 +108,26 @@ public class MovieRecommender {
         String toUse = ",\"id\":";
         // Fix IDs so if not able to parse through with integers then don't add to ID list
         String[] list = response.body().split(toUse);
+        ArrayList<String> id = new ArrayList<>();
         String[] ids = new String[list.length];
         for(int i = 0; i < list.length; i++) {
-            // How to check if number is only integers
-            String current = list[i].substring(0, 6);
-            int num = Integer.parseInt(current);
-
             ids[i] = list[i].substring(0, 6);
         }
+
         ArrayList<String> convert = new ArrayList<>();
-        Collections.addAll(convert, ids);
-        convert.removeFirst();
-        convert.remove(10);
-        convert.remove(10);
-        convert.removeLast();
+        for (String s : list) {
+            convert.add(s);
+            for (int j = 0; j < s.length(); j++) {
+                char c = s.charAt(j);
+                if (!Character.isDigit(c)) {
+                    convert.removeLast();
+                }
+            }
+        }
 
         String[] r = new String[convert.size()];
         for(int i = 0; i < convert.size(); i++) {
             r[i] = convert.get(i);
-           // System.out.println(r[i]);
         }
 
         // Need to convert to Integer to call getDetails()
