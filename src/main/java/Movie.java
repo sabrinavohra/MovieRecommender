@@ -8,6 +8,7 @@ public class Movie {
     private String genre;
     private String overview;
     private Images poster;
+    private int rating;
 
     public Movie(String name, int length, int budget, Genre genre, String overview, Images poster) {
         this.name = name;
@@ -30,6 +31,12 @@ public class Movie {
         this.length = length;
         this.budget = budget;
         this.genre = genre;
+    }
+
+    public Movie(String genre, String length, String rating) {
+        this.genre = genre;
+        this.length = Integer.parseInt(length);
+        this.rating = Integer.parseInt(rating);
     }
 
     public String toString() {

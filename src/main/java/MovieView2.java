@@ -6,8 +6,11 @@ import java.awt.event.ActionListener;
 public class MovieView2 extends JFrame {
     private JTextField genreField, lengthField, ratingField;
     private JPanel inputPanel, goPanel;
+    private MovieRecommender back;
 
     public MovieView2() {
+        back = new MovieRecommender();
+
         setTitle("Movie Recommender");
         setSize(1024, 825);
         setLocationRelativeTo(null);
@@ -52,7 +55,20 @@ public class MovieView2 extends JFrame {
         goButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                showNextScreen();
+                String genre = genreField.getText().trim();
+                String length = lengthField.getText().trim();
+                String rating = ratingField.getText().trim();
+
+                if (genre.isEmpty() || length.isEmpty() || rating.isEmpty()) {
+                    JOptionPane.showMessageDialog(
+                            MovieView2.this,
+                            "Please fill in all the fields (Genre, Length, and Rating).",
+                            "Missing Input",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                } else {
+                    showNextScreen();
+                }
             }
         });
         gbc.gridx = 1;
@@ -81,6 +97,8 @@ public class MovieView2 extends JFrame {
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setBackground(Color.PINK);
+        Movie input = new Movie(genreField.getText(), lengthField.getText(), ratingField.getText());
+        MovieRecommender.closest(input);
         infoPanel.add(new JLabel("Genre: " + genreField.getText()));
         infoPanel.add(new JLabel("Length: " + lengthField.getText()));
         infoPanel.add(new JLabel("Rating: " + ratingField.getText()));
