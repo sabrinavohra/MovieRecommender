@@ -97,9 +97,7 @@ public class MovieView2 extends JFrame {
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setBackground(Color.PINK);
-        Movie input = new Movie(genreField.getText(), lengthField.getText(), ratingField.getText());
-        Movie a = MovieRecommender.closest(input);
-        infoPanel.add(new JLabel(String.valueOf(a)));
+
         infoPanel.add(new JLabel("Genre: " + genreField.getText()));
         infoPanel.add(new JLabel("Length: " + lengthField.getText()));
         infoPanel.add(new JLabel("Rating: " + ratingField.getText()));
@@ -116,10 +114,36 @@ public class MovieView2 extends JFrame {
 
         whitePanel.add(moviesPanel, BorderLayout.CENTER);
 
+        // Bottom panel for replay button
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setBackground(Color.PINK);
+        JButton replayButton = new JButton("Replay");
+        replayButton.setPreferredSize(new Dimension(120, 40));
+        replayButton.setBackground(Color.BLUE);
+        replayButton.setForeground(Color.WHITE);
+
+        replayButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getContentPane().removeAll();
+                genreField.setText("");
+                lengthField.setText("");
+                ratingField.setText("");
+                add(inputPanel, BorderLayout.CENTER);
+                revalidate();
+                repaint();
+            }
+        });
+
+        // Change color for the button
+        bottomPanel.add(replayButton);
+        whitePanel.add(bottomPanel, BorderLayout.SOUTH);
+
         add(whitePanel);
         revalidate();
         repaint();
     }
+
 
     // Helper method to add a poster and label
         private void addMoviePoster(JPanel panel, String imagePath, String title) {

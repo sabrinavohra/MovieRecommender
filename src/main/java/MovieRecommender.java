@@ -30,7 +30,7 @@ public class MovieRecommender {
         Scanner input = new Scanner(System.in);
         // Must fix load to have movies in movieList
         loadIDs();
-        System.out.println("How long would you like your movie to be?");
+        /* System.out.println("How long would you like your movie to be?");
         int len = input.nextInt();
         System.out.println("What should the budget be?");
         int budg = input.nextInt();
@@ -39,9 +39,9 @@ public class MovieRecommender {
         String gen = input.nextLine();
         System.out.println("What is a movie you've previously enjoyed?");
         String prev = input.nextLine();
-        Movie user = new Movie(len, budg, gen);
+        Movie user = new Movie(len, budg, rating, gen);
         Movie theClosest = closest(user);
-        System.out.println(theClosest);
+        System.out.println(theClosest); */
     }
 
     public static Movie closest (Movie a) {
@@ -74,8 +74,9 @@ public class MovieRecommender {
             total++;
         }
         if(a.getGenre().equals(b.getGenre())) {
-            total+=2;
+            total+=5;
         }
+        System.out.println(total);
         return total;
     }
 
@@ -139,7 +140,7 @@ public class MovieRecommender {
         for(int i = 0; i < r.length; i++) {
             // Fix IDs
             MovieDb m = tmdbMovies.getDetails(Integer.parseInt(r[i]), "en-US", MovieAppendToResponse.IMAGES);
-            Movie n = new Movie(m.getTitle(), m.getRuntime(), m.getBudget(), m.getGenres().getFirst(), m.getOverview(), m.getImages());
+            Movie n = new Movie(m.getTitle(), m.getRuntime(), m.getBudget(), m.getGenres().getFirst(), m.getOverview(), m.getPopularity(), m.getImages());
             movieList.add(n);
             System.out.println(n);
         }

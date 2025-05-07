@@ -8,15 +8,16 @@ public class Movie {
     private String genre;
     private String overview;
     private Images poster;
-    private int rating;
+    private double rating;
 
-    public Movie(String name, int length, int budget, Genre genre, String overview, Images poster) {
+    public Movie(String name, int length, int budget, Genre genre, String overview, double rating, Images poster) {
         this.name = name;
         this.length = length;
         this.budget = budget;
         this.genre = genre.getName();
         this.overview = overview;
         this.poster = poster;
+        this.rating = rating;
     }
 
     public Movie(String name, int length, int budget, String genre, String overview) {
@@ -27,10 +28,11 @@ public class Movie {
         this.overview = overview;
     }
 
-    public Movie(int length, int budget, String genre) {
+    public Movie(int length, int budget, double rating, String genre) {
         this.length = length;
         this.budget = budget;
         this.genre = genre;
+        this.rating = rating;
     }
 
     public Movie(String genre, String length, String rating) {
@@ -40,7 +42,7 @@ public class Movie {
     }
 
     public String toString() {
-        return "Title: " + name + "\nLength: " + length + "\nBudget: " + budget + "\nGenre: " + genre + "\nOverview:" + overview + "\nPoster: " + poster + "\n\n\n";
+        return "Title: " + name + "\nLength: " + length + "\nBudget: " + budget + "\nGenre: " + genre + "\nOverview:" + overview + "\nRating" + rating+ "\nPoster:" + poster + "\n\n\n";
     }
 
     public String getName() {
