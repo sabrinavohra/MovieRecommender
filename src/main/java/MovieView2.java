@@ -98,7 +98,8 @@ public class MovieView2 extends JFrame {
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setBackground(Color.PINK);
         Movie input = new Movie(genreField.getText(), lengthField.getText(), ratingField.getText());
-        MovieRecommender.closest(input);
+        Movie a = MovieRecommender.closest(input);
+        infoPanel.add(new JLabel(String.valueOf(a)));
         infoPanel.add(new JLabel("Genre: " + genreField.getText()));
         infoPanel.add(new JLabel("Length: " + lengthField.getText()));
         infoPanel.add(new JLabel("Rating: " + ratingField.getText()));

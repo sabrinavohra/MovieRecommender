@@ -103,43 +103,45 @@ public class MovieRecommender {
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        //System.out.println(response.body());
+        System.out.println(response.body());
         String toUse = ",\"id\":";
-        // Fix IDs so if not able to parse through with integers then don't add to ID list
         String[] list = response.body().split(toUse);
         ArrayList<String> id = new ArrayList<>();
         String[] ids = new String[list.length];
         for(int i = 0; i < list.length; i++) {
-            ids[i] = list[i].substring(0, 6);
+            ids[i] = list[i].substring(0, 7);
         }
 
         ArrayList<String> convert = new ArrayList<>();
-        for (String s : list) {
+        for (String s : ids) {
+            //convert.add(null);
             convert.add(s);
             for (int j = 0; j < s.length(); j++) {
                 char c = s.charAt(j);
                 if (!Character.isDigit(c)) {
-                    convert.removeLast();
+                    convert.remove(s);
                 }
             }
+            //convert.remove(null);
         }
 
         String[] r = new String[convert.size()];
         for(int i = 0; i < convert.size(); i++) {
             r[i] = convert.get(i);
+            System.out.println(r[i]);
         }
 
         // Need to convert to Integer to call getDetails()
-        Integer[] finalIds = new Integer[ids.length];
+        /* Integer[] finalIds = new Integer[r.length];
         for(int i = 0; i < r.length; i++) {
             finalIds[i] = Integer.valueOf(r[i]);
-        }
-        for(int i = 0; i < finalIds.length; i++) {
+        } */
+        for(int i = 0; i < r.length; i++) {
             // Fix IDs
-            MovieDb m = tmdbMovies.getDetails(finalIds[i], "en-US", MovieAppendToResponse.IMAGES);
+            MovieDb m = tmdbMovies.getDetails(Integer.parseInt(r[i]), "en-US", MovieAppendToResponse.IMAGES);
             Movie n = new Movie(m.getTitle(), m.getRuntime(), m.getBudget(), m.getGenres().getFirst(), m.getOverview(), m.getImages());
             movieList.add(n);
-            System.out.println(movieList);
+            System.out.println(n);
         }
     }
 }
