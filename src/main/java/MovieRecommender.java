@@ -68,7 +68,7 @@ public class MovieRecommender {
             // Have fields in a record and which saved record is the most similar?
         int total = 0;
         if(Math.abs(a.getLength() - b.getLength()) <= 15) {
-            total++;
+            total+=2;
         }
         if(Math.abs(a.getBudget() - b.getBudget()) <= 100) {
             total++;
@@ -76,7 +76,6 @@ public class MovieRecommender {
         if(a.getGenre().equals(b.getGenre())) {
             total+=5;
         }
-        System.out.println(total);
         return total;
     }
 
@@ -97,52 +96,55 @@ public class MovieRecommender {
         TmdbApi tmdbApi = new TmdbApi("eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMDkwNjk5ZGE1ODg4ZGI5MjE1ZGNmMGNhMjgwZDZmYiIsIm5iZiI6MTc0MzE5MjczMi42ODUsInN1YiI6IjY3ZTcwMjljMDkyNTI4NjJlYTc2N2U4NSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Q08Y593tZg-jbJ1WUG5Q5QV4Wc_NeCiZ4nM9x0JHb3A");
         TmdbMovies tmdbMovies = tmdbApi.getMovies();
         //MovieDb movie = tmdbMovies.getDetails(5353, "en-US");
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc"))
-                .header("accept", "application/json")
-                .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMDkwNjk5ZGE1ODg4ZGI5MjE1ZGNmMGNhMjgwZDZmYiIsIm5iZiI6MTc0MzE5MjczMi42ODUsInN1YiI6IjY3ZTcwMjljMDkyNTI4NjJlYTc2N2U4NSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Q08Y593tZg-jbJ1WUG5Q5QV4Wc_NeCiZ4nM9x0JHb3A")
-                .method("GET", HttpRequest.BodyPublishers.noBody())
-                .build();
-        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
-        String toUse = ",\"id\":";
-        String[] list = response.body().split(toUse);
-        ArrayList<String> id = new ArrayList<>();
-        String[] ids = new String[list.length];
-        for(int i = 0; i < list.length; i++) {
-            ids[i] = list[i].substring(0, 7);
-        }
-
-        ArrayList<String> convert = new ArrayList<>();
-        for (String s : ids) {
-            //convert.add(null);
-            convert.add(s);
-            for (int j = 0; j < s.length(); j++) {
-                char c = s.charAt(j);
-                if (!Character.isDigit(c)) {
-                    convert.remove(s);
-                }
+        for (int m = 0; m < 50; m++) {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=" + m +"&sort_by=popularity.desc"))
+                    .header("accept", "application/json")
+                    .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMDkwNjk5ZGE1ODg4ZGI5MjE1ZGNmMGNhMjgwZDZmYiIsIm5iZiI6MTc0MzE5MjczMi42ODUsInN1YiI6IjY3ZTcwMjljMDkyNTI4NjJlYTc2N2U4NSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Q08Y593tZg-jbJ1WUG5Q5QV4Wc_NeCiZ4nM9x0JHb3A")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+            //System.out.println(response.body());
+            String toUse = ",\"id\":";
+            String[] list = response.body().split(toUse);
+            ArrayList<String> id = new ArrayList<>();
+            String[] ids = new String[list.length];
+            for (int i = 0; i < list.length; i++) {
+                ids[i] = list[i].substring(0, 7);
             }
-            //convert.remove(null);
-        }
 
-        String[] r = new String[convert.size()];
-        for(int i = 0; i < convert.size(); i++) {
-            r[i] = convert.get(i);
-            System.out.println(r[i]);
-        }
+            ArrayList<String> convert = new ArrayList<>();
+            for (String s : ids) {
+                //convert.add(null);
+                convert.add(s);
+                for (int j = 0; j < s.length(); j++) {
+                    char c = s.charAt(j);
+                    if (!Character.isDigit(c)) {
+                        convert.remove(s);
+                    }
+                }
+                //convert.remove(null);
+            }
 
-        // Need to convert to Integer to call getDetails()
+            String[] r = new String[convert.size()];
+            for (int i = 0; i < convert.size(); i++) {
+                r[i] = convert.get(i);
+                //System.out.println(r[i]);
+            }
+
+            // Need to convert to Integer to call getDetails()
         /* Integer[] finalIds = new Integer[r.length];
         for(int i = 0; i < r.length; i++) {
             finalIds[i] = Integer.valueOf(r[i]);
         } */
-        for(int i = 0; i < r.length; i++) {
-            // Fix IDs
-            MovieDb m = tmdbMovies.getDetails(Integer.parseInt(r[i]), "en-US", MovieAppendToResponse.IMAGES);
-            Movie n = new Movie(m.getTitle(), m.getRuntime(), m.getBudget(), m.getGenres().getFirst(), m.getOverview(), m.getPopularity(), m.getImages());
-            movieList.add(n);
-            System.out.println(n);
+            for (int i = 0; i < r.length; i++) {
+                // Fix IDs
+                MovieDb mov = tmdbMovies.getDetails(Integer.parseInt(r[i]), "en-US", MovieAppendToResponse.IMAGES);
+                Movie n = new Movie(mov.getTitle(), mov.getRuntime(), mov.getBudget(), mov.getGenres().getFirst(), mov.getOverview(), mov.getPopularity(), mov.getImages());
+                movieList.add(n);
+                //System.out.println(n);
+            }
         }
+        System.out.println(movieList);
     }
 }

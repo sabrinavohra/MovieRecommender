@@ -98,9 +98,13 @@ public class MovieView2 extends JFrame {
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setBackground(Color.PINK);
 
+        Movie user = new Movie(genreField.getText(), lengthField.getText(), ratingField.getText());
+        Movie found = MovieRecommender.closest(user);
+        String finalFound = found.toString();
         infoPanel.add(new JLabel("Genre: " + genreField.getText()));
         infoPanel.add(new JLabel("Length: " + lengthField.getText()));
         infoPanel.add(new JLabel("Rating: " + ratingField.getText()));
+        infoPanel.add(new JLabel("Movie for you: " + finalFound));
         whitePanel.add(infoPanel, BorderLayout.NORTH);
 
         // Center panel for movie posters and titles
@@ -120,7 +124,7 @@ public class MovieView2 extends JFrame {
         JButton replayButton = new JButton("Replay");
         replayButton.setPreferredSize(new Dimension(120, 40));
         replayButton.setBackground(Color.BLUE);
-        replayButton.setForeground(Color.WHITE);
+        replayButton.setForeground(Color.BLACK);
 
         replayButton.addActionListener(new ActionListener() {
             @Override
