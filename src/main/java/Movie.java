@@ -7,7 +7,7 @@ public class Movie {
     private int budget;
     private String genre;
     private String overview;
-    private Images poster;
+    private Images images;
     private double rating;
 
     public Movie(String name, int length, int budget, Genre genre, String overview, double rating, Images poster) {
@@ -16,7 +16,7 @@ public class Movie {
         this.budget = budget;
         this.genre = genre.getName();
         this.overview = overview;
-        this.poster = poster;
+        this.images = poster;
         this.rating = rating;
     }
 
@@ -42,7 +42,7 @@ public class Movie {
     }
 
     public String toString() {
-        return "Title: " + name + "\nLength: " + length + "\nBudget: " + budget + "\nGenre: " + genre + "\nOverview:" + overview + "\nRating" + rating+ "\nPoster:" + poster + "\n\n\n";
+        return "Title: " + name + "\nLength: " + length + "\nBudget: " + budget + "\nGenre: " + genre + "\nOverview:" + overview + "\nRating" + rating+ "\nPoster:" + images + "\n\n\n";
     }
 
     public String getName() {
@@ -65,7 +65,11 @@ public class Movie {
         return this.overview;
     }
 
-    public Images getPoster()  {
-        return this.poster;
+    public Images getImages()  {
+        return this.images;
+    }
+
+    public double getRating() {
+        return this.rating;
     }
 }

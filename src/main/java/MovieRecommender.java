@@ -1,10 +1,12 @@
 import info.movito.themoviedbapi.TmdbApi;
 import info.movito.themoviedbapi.TmdbMovies;
+import info.movito.themoviedbapi.model.movies.Images;
 import info.movito.themoviedbapi.model.movies.MovieDb;
 import info.movito.themoviedbapi.tools.TmdbException;
 import info.movito.themoviedbapi.tools.appendtoresponse.MovieAppendToResponse;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -44,19 +46,29 @@ public class MovieRecommender {
         System.out.println(theClosest); */
     }
 
-    public static Movie closest (Movie a) {
-        Movie current = null;
-        int highest = 0;
-        for(int i = 0; i < movieList.size(); i++) {
-            int c = editDistance(a, movieList.get(i));
-            if(c > highest) {
-                current = movieList.get(i);
+    public static ArrayList<Movie> closest (Movie a) {
+        ArrayList<Movie> topMatches = new ArrayList<>(movieList);
+
+        // Sort movies by descending edit distance (most similar first)
+        topMatches.sort((m1, m2) -> Integer.compare(
+                editDistance(a, m2),
+                editDistance(a, m1)
+        ));
+
+        // Collect the top 3 distinct movies
+        ArrayList<Movie> result = new ArrayList<>();
+        for (Movie m : topMatches) {
+            if (!result.contains(m)) {
+                result.add(m);
             }
+            if (result.size() == 3) break;
         }
-        if(current == null) {
-            return test;
+
+        // Fallback to test movie if not enough matches
+        while (result.size() < 3) {
+            result.add(test);
         }
-        return current;
+        return result;
     }
 
     public static int editDistance(Movie a, Movie b) {
@@ -140,7 +152,8 @@ public class MovieRecommender {
             for (int i = 0; i < r.length; i++) {
                 // Fix IDs
                 MovieDb mov = tmdbMovies.getDetails(Integer.parseInt(r[i]), "en-US", MovieAppendToResponse.IMAGES);
-                Movie n = new Movie(mov.getTitle(), mov.getRuntime(), mov.getBudget(), mov.getGenres().getFirst(), mov.getOverview(), mov.getPopularity(), mov.getImages());
+                Images images = mov.getImages();
+                Movie n = new Movie(mov.getTitle(), mov.getRuntime(), mov.getBudget(), mov.getGenres().getFirst(), mov.getOverview(), mov.getPopularity(), images);
                 movieList.add(n);
                 //System.out.println(n);
             }

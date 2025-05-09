@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class MovieView2 extends JFrame {
     private JTextField genreField, lengthField, ratingField;
@@ -90,56 +91,73 @@ public class MovieView2 extends JFrame {
         getContentPane().removeAll();
 
         JPanel whitePanel = new JPanel();
-        whitePanel.setBackground(Color.PINK);
+        whitePanel.setBackground(Color.LIGHT_GRAY);
         whitePanel.setLayout(new BorderLayout());
 
-        // Top panel for text info
-        JPanel infoPanel = new JPanel();
-        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.setBackground(Color.PINK);
+        // Create user movie from input fields
+        int length = Integer.parseInt(lengthField.getText().trim());
+        String genre = genreField.getText().trim();
+        int budget = 1000; // optional/fixed for now
+        Movie userMovie = new Movie(genre, lengthField.getText(), ratingField.getText()); // assuming constructor matches
 
-        Movie user = new Movie(genreField.getText(), lengthField.getText(), ratingField.getText());
-        Movie found = MovieRecommender.closest(user);
-        String finalFound = found.toString();
-        infoPanel.add(new JLabel("Genre: " + genreField.getText()));
-        infoPanel.add(new JLabel("Length: " + lengthField.getText()));
-        infoPanel.add(new JLabel("Rating: " + ratingField.getText()));
-        infoPanel.add(new JLabel("Movie for you: " + finalFound));
-        whitePanel.add(infoPanel, BorderLayout.NORTH);
+        ArrayList<Movie> recommended = MovieRecommender.closest(userMovie);
 
-        // Center panel for movie posters and titles
-        JPanel moviesPanel = new JPanel(new GridLayout(1, 3, 20, 10));
-        moviesPanel.setBackground(Color.PINK);
+        // CENTER: Show all recommended movies
+        JPanel centerPanel = new JPanel(new GridLayout(1, 3, 20, 10));
+        centerPanel.setBackground(Color.LIGHT_GRAY);
 
-        // Example posters and labels
-        addMoviePoster(moviesPanel, "poster1.jpg", "Movie 1");
-        addMoviePoster(moviesPanel, "poster2.jpg", "Movie 2");
-        addMoviePoster(moviesPanel, "poster3.jpg", "Movie 3");
+        for (Movie movie : recommended) {
+            JPanel moviePanel = new JPanel();
+            moviePanel.setLayout(new BoxLayout(moviePanel, BoxLayout.Y_AXIS));
+            moviePanel.setBackground(Color.LIGHT_GRAY);
 
-        whitePanel.add(moviesPanel, BorderLayout.CENTER);
+            // Add poster
+            try {
+                if (movie.getImages() != null && !movie.getImages().getPosters().isEmpty()) {
+                    String posterPath = movie.getImages().getPosters().get(0).getFilePath();
+                    String fullUrl = "https://image.tmdb.org/t/p/w500" + posterPath;
+                    ImageIcon icon = new ImageIcon(new java.net.URL(fullUrl));
+                    Image img = icon.getImage().getScaledInstance(180, 270, Image.SCALE_SMOOTH);
+                    JLabel imageLabel = new JLabel(new ImageIcon(img));
+                    moviePanel.add(imageLabel);
+                } else {
+                    moviePanel.add(new JLabel("No poster available."));
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                moviePanel.add(new JLabel("Error loading image."));
+            }
 
-        // Bottom panel for replay button
+            moviePanel.add(Box.createVerticalStrut(15));
+            moviePanel.add(new JLabel("Title: " + movie.getName()));
+            moviePanel.add(new JLabel("Genre: " + movie.getGenre()));
+            moviePanel.add(new JLabel("Length: " + movie.getLength() + " min"));
+            moviePanel.add(new JLabel("Budget: $" + movie.getBudget()));
+            moviePanel.add(new JLabel("Rating: " + movie.getRating()));
+
+            centerPanel.add(moviePanel);
+        }
+
+        whitePanel.add(centerPanel, BorderLayout.CENTER);
+
+        // SOUTH: Replay button
         JPanel bottomPanel = new JPanel();
-        bottomPanel.setBackground(Color.PINK);
+        bottomPanel.setBackground(Color.LIGHT_GRAY);
         JButton replayButton = new JButton("Replay");
         replayButton.setPreferredSize(new Dimension(120, 40));
         replayButton.setBackground(Color.BLUE);
-        replayButton.setForeground(Color.BLACK);
+        replayButton.setForeground(Color.LIGHT_GRAY);
 
-        replayButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                getContentPane().removeAll();
-                genreField.setText("");
-                lengthField.setText("");
-                ratingField.setText("");
-                add(inputPanel, BorderLayout.CENTER);
-                revalidate();
-                repaint();
-            }
+        replayButton.addActionListener(e -> {
+            getContentPane().removeAll();
+            genreField.setText("");
+            lengthField.setText("");
+            ratingField.setText("");
+            add(inputPanel, BorderLayout.CENTER);
+            revalidate();
+            repaint();
         });
 
-        // Change color for the button
         bottomPanel.add(replayButton);
         whitePanel.add(bottomPanel, BorderLayout.SOUTH);
 
@@ -153,7 +171,7 @@ public class MovieView2 extends JFrame {
         private void addMoviePoster(JPanel panel, String imagePath, String title) {
             JPanel moviePanel = new JPanel();
             moviePanel.setLayout(new BorderLayout());
-            moviePanel.setBackground(Color.WHITE);
+            moviePanel.setBackground(Color.LIGHT_GRAY);
 
             try {
                 ImageIcon icon = new ImageIcon(imagePath);
