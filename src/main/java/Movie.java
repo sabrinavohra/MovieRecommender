@@ -61,10 +61,6 @@ public class Movie {
         return this.genre;
     }
 
-    public String getOverview() {
-        return this.overview;
-    }
-
     public Images getImages()  {
         return this.images;
     }

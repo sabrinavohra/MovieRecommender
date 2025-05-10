@@ -21,7 +21,7 @@ public class MovieView2 extends JFrame {
 
         // Create panel with labels and text fields
         inputPanel = new JPanel(new GridBagLayout());
-        inputPanel.setBackground(Color.LIGHT_GRAY); // for visibility
+        inputPanel.setBackground(Color.LIGHT_GRAY);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(30, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
@@ -56,7 +56,7 @@ public class MovieView2 extends JFrame {
         Font a = new Font("Arial", Font.BOLD, 16);
         JButton goButton = new JButton("GO!!");
         goButton.setFont(a);
-        //goButton.setPreferredSize(new Dimension(250, 40));
+
         goButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -101,7 +101,7 @@ public class MovieView2 extends JFrame {
         // Create user movie from input fields
         int length = Integer.parseInt(lengthField.getText().trim());
         String genre = genreField.getText().trim();
-        int budget = 1000; // optional/fixed for now
+        int budget = 1000; // Can change later to be based upon user input
         Movie userMovie = new Movie(genre, lengthField.getText(), ratingField.getText()); // assuming constructor matches
 
         ArrayList<Movie> recommended = MovieRecommender.closest(userMovie);
