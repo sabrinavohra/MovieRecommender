@@ -8,6 +8,7 @@ public class MovieView2 extends JFrame {
     private JTextField genreField, lengthField, ratingField;
     private JPanel inputPanel, goPanel;
     private MovieRecommender back;
+    private final Font a = new Font("Arial", Font.BOLD, 16);
 
     public MovieView2() {
         back = new MovieRecommender();
@@ -24,6 +25,7 @@ public class MovieView2 extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(30, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
+
 
         // Genre
         gbc.gridx = 0;
@@ -51,7 +53,9 @@ public class MovieView2 extends JFrame {
 
         // GO button
         goPanel = new JPanel();
-        JButton goButton = new JButton("GO");
+        Font a = new Font("Arial", Font.BOLD, 16);
+        JButton goButton = new JButton("GO!!");
+        goButton.setFont(a);
         //goButton.setPreferredSize(new Dimension(250, 40));
         goButton.addActionListener(new ActionListener() {
             @Override
@@ -143,10 +147,11 @@ public class MovieView2 extends JFrame {
         // SOUTH: Replay button
         JPanel bottomPanel = new JPanel();
         bottomPanel.setBackground(Color.LIGHT_GRAY);
-        JButton replayButton = new JButton("Replay");
-        replayButton.setPreferredSize(new Dimension(120, 40));
+        JButton replayButton = new JButton("REPLAY!");
+        replayButton.setPreferredSize(new Dimension(120, 60));
+        replayButton.setFont(a);
         replayButton.setBackground(Color.BLUE);
-        replayButton.setForeground(Color.LIGHT_GRAY);
+        replayButton.setForeground(Color.BLACK);
 
         replayButton.addActionListener(e -> {
             getContentPane().removeAll();
