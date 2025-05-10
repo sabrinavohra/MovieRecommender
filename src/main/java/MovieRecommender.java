@@ -1,5 +1,12 @@
+import com.sun.net.httpserver.Request;
 import info.movito.themoviedbapi.TmdbApi;
+import info.movito.themoviedbapi.TmdbDiscover;
+import info.movito.themoviedbapi.model.core.MovieResultsPage;
+import info.movito.themoviedbapi.TmdbApi;
+import info.movito.themoviedbapi.TmdbDiscover;
 import info.movito.themoviedbapi.TmdbMovies;
+//import info.movito.themoviedbapi.model.core.Movie;
+import info.movito.themoviedbapi.model.core.MovieResultsPage;
 import info.movito.themoviedbapi.model.movies.Images;
 import info.movito.themoviedbapi.model.movies.MovieDb;
 import info.movito.themoviedbapi.tools.TmdbException;
@@ -107,7 +114,6 @@ public class MovieRecommender {
     public static void loadIDs() throws IOException, InterruptedException, TmdbException {
         TmdbApi tmdbApi = new TmdbApi("eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMDkwNjk5ZGE1ODg4ZGI5MjE1ZGNmMGNhMjgwZDZmYiIsIm5iZiI6MTc0MzE5MjczMi42ODUsInN1YiI6IjY3ZTcwMjljMDkyNTI4NjJlYTc2N2U4NSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Q08Y593tZg-jbJ1WUG5Q5QV4Wc_NeCiZ4nM9x0JHb3A");
         TmdbMovies tmdbMovies = tmdbApi.getMovies();
-        //MovieDb movie = tmdbMovies.getDetails(5353, "en-US");
         for (int m = 0; m < 50; m++) {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=" + m +"&sort_by=popularity.desc"))
@@ -144,11 +150,6 @@ public class MovieRecommender {
                 //System.out.println(r[i]);
             }
 
-            // Need to convert to Integer to call getDetails()
-        /* Integer[] finalIds = new Integer[r.length];
-        for(int i = 0; i < r.length; i++) {
-            finalIds[i] = Integer.valueOf(r[i]);
-        } */
             for (int i = 0; i < r.length; i++) {
                 // Fix IDs
                 MovieDb mov = tmdbMovies.getDetails(Integer.parseInt(r[i]), "en-US", MovieAppendToResponse.IMAGES);
@@ -160,4 +161,5 @@ public class MovieRecommender {
         }
         System.out.println(movieList);
     }
+
 }
