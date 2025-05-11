@@ -111,13 +111,9 @@ public class MovieRecommender {
             for (int i = 0; i < r.length; i++) {
                 MovieDb mov = tmdbMovies.getDetails(Integer.parseInt(r[i]), "en-US", MovieAppendToResponse.IMAGES);
                 List<Artwork> images = mov.getImages().getPosters();
-                System.out.println(images);
                 Movie n = new Movie(mov.getTitle(), mov.getRuntime(), mov.getBudget(), mov.getGenres().getFirst(), mov.getOverview(), mov.getPopularity(), images);
                 movieList.add(n);
             }
         }
-        System.out.println(movieList);
     }
-
-
 }

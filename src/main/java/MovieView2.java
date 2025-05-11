@@ -135,7 +135,7 @@ public class MovieView2 extends JFrame {
                     JLabel imageLabel = new JLabel(new ImageIcon(img));
                     moviePanel.add(imageLabel);
                 } else {
-                    moviePanel.add(new JLabel("No poster available."));
+                    moviePanel.setForeground(Color.LIGHT_GRAY);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -150,22 +150,30 @@ public class MovieView2 extends JFrame {
             moviePanel.add(new JLabel("Rating: " + movie.getRating()));
             moviePanel.add(Box.createVerticalStrut(10));
 
-            // Overview with line wrapping
+            // Overview Section
             JTextArea overviewArea = new JTextArea("Overview:\n" + movie.getOverview());
+            overviewArea.setFont(UIManager.getFont("Label.font")); // Ensure consistent font
             overviewArea.setLineWrap(true);
             overviewArea.setWrapStyleWord(true);
             overviewArea.setEditable(false);
+            overviewArea.setForeground(Color.BLACK); // Optional: change text color
             overviewArea.setOpaque(false);
-            overviewArea.setMaximumSize(new Dimension(200, 100));
-            overviewArea.setAlignmentX(Component.LEFT_ALIGNMENT);
+            overviewArea.setMaximumSize(new Dimension(200, 120)); // Adjust the size as needed
             overviewArea.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
-            moviePanel.add(overviewArea);
+
+            // Wrap in JScrollPane for scroll functionality
+            JScrollPane overviewScrollPane = new JScrollPane(overviewArea);
+            overviewScrollPane.setPreferredSize(new Dimension(200, 100)); // Adjust size as needed
+            overviewScrollPane.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
+            overviewScrollPane.setOpaque(false);
+            overviewScrollPane.getViewport().setOpaque(false);
+            moviePanel.add(overviewScrollPane);
 
             centerPanel.add(moviePanel);
+
             if (i < maxMovies - 1) {
                 centerPanel.add(Box.createHorizontalStrut(80)); // adds space between movie panels
             }
-
         }
 
         // Wrap centerPanel for vertical centering
@@ -205,6 +213,7 @@ public class MovieView2 extends JFrame {
         revalidate();
         repaint();
     }
+
 
     public static void main(String[] args) {
         MovieView2 current = new MovieView2();
