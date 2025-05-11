@@ -1,13 +1,9 @@
 import info.movito.themoviedbapi.TmdbApi;
-import info.movito.themoviedbapi.TmdbDiscover;
 import info.movito.themoviedbapi.TmdbMovies;
-import info.movito.themoviedbapi.model.core.MovieResultsPage;
 import info.movito.themoviedbapi.model.core.image.Artwork;
-import info.movito.themoviedbapi.model.movies.Images;
 import info.movito.themoviedbapi.model.movies.MovieDb;
 import info.movito.themoviedbapi.tools.TmdbException;
 import info.movito.themoviedbapi.tools.appendtoresponse.MovieAppendToResponse;
-import info.movito.themoviedbapi.tools.builders.discover.DiscoverMovieParamBuilder;
 
 import java.io.IOException;
 import java.net.URI;
