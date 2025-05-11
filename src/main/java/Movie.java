@@ -1,5 +1,8 @@
 import info.movito.themoviedbapi.model.core.Genre;
+import info.movito.themoviedbapi.model.core.image.Artwork;
 import info.movito.themoviedbapi.model.movies.Images;
+
+import java.util.List;
 
 public class Movie {
     private String name;
@@ -7,10 +10,10 @@ public class Movie {
     private int budget;
     private String genre;
     private String overview;
-    private Images images;
+    private List<Artwork> images;
     private double rating;
 
-    public Movie(String name, int length, int budget, Genre genre, String overview, double rating, Images poster) {
+    public Movie(String name, int length, int budget, Genre genre, String overview, double rating, List<Artwork> poster) {
         this.name = name;
         this.length = length;
         this.budget = budget;
@@ -61,11 +64,15 @@ public class Movie {
         return this.genre;
     }
 
-    public Images getImages()  {
+    public List<Artwork> getImages()  {
         return this.images;
     }
 
     public double getRating() {
         return this.rating;
+    }
+
+    public String getOverview() {
+        return this.overview;
     }
 }

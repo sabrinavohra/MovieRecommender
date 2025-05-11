@@ -1,9 +1,13 @@
 import info.movito.themoviedbapi.TmdbApi;
+import info.movito.themoviedbapi.TmdbDiscover;
 import info.movito.themoviedbapi.TmdbMovies;
+import info.movito.themoviedbapi.model.core.MovieResultsPage;
+import info.movito.themoviedbapi.model.core.image.Artwork;
 import info.movito.themoviedbapi.model.movies.Images;
 import info.movito.themoviedbapi.model.movies.MovieDb;
 import info.movito.themoviedbapi.tools.TmdbException;
 import info.movito.themoviedbapi.tools.appendtoresponse.MovieAppendToResponse;
+import info.movito.themoviedbapi.tools.builders.discover.DiscoverMovieParamBuilder;
 
 import java.io.IOException;
 import java.net.URI;
@@ -11,6 +15,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MovieRecommender {
@@ -36,7 +41,6 @@ public class MovieRecommender {
 
     public static ArrayList<Movie> closest (Movie a) {
         ArrayList<Movie> topMatches = new ArrayList<>(movieList);
-
         topMatches.sort((m1, m2) -> Integer.compare(
                 editDistance(a, m2),
                 editDistance(a, m1)
@@ -106,11 +110,14 @@ public class MovieRecommender {
 
             for (int i = 0; i < r.length; i++) {
                 MovieDb mov = tmdbMovies.getDetails(Integer.parseInt(r[i]), "en-US", MovieAppendToResponse.IMAGES);
-                Images images = mov.getImages();
+                List<Artwork> images = mov.getImages().getPosters();
+                System.out.println(images);
                 Movie n = new Movie(mov.getTitle(), mov.getRuntime(), mov.getBudget(), mov.getGenres().getFirst(), mov.getOverview(), mov.getPopularity(), images);
                 movieList.add(n);
             }
         }
         System.out.println(movieList);
     }
+
+
 }
