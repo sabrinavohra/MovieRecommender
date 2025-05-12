@@ -1,7 +1,5 @@
 import info.movito.themoviedbapi.model.core.Genre;
 import info.movito.themoviedbapi.model.core.image.Artwork;
-import info.movito.themoviedbapi.model.movies.Images;
-
 import java.util.List;
 
 public class Movie {
@@ -13,6 +11,7 @@ public class Movie {
     private List<Artwork> images;
     private double rating;
 
+    // Constructor used for information given from API
     public Movie(String name, int length, int budget, Genre genre, String overview, double rating, List<Artwork> poster) {
         this.name = name;
         this.length = length;
@@ -23,6 +22,7 @@ public class Movie {
         this.rating = rating;
     }
 
+    // Constructor used for creating test / backup movie
     public Movie(String name, int length, int budget, String genre, String overview) {
         this.name = name;
         this.length = length;
@@ -31,22 +31,19 @@ public class Movie {
         this.overview = overview;
     }
 
-    public Movie(int length, int budget, double rating, String genre) {
-        this.length = length;
-        this.budget = budget;
-        this.genre = genre;
-        this.rating = rating;
-    }
-
+    // Constructor used for information inputted by user
     public Movie(String genre, String length, String rating) {
         this.genre = genre;
         this.length = Integer.parseInt(length);
         this.rating = Integer.parseInt(rating);
     }
 
+    // Used for debugging to make sure all information is being returned
     public String toString() {
         return "Title: " + name + "\nLength: " + length + "\nBudget: " + budget + "\nGenre: " + genre + "\nOverview:" + overview + "\nRating" + rating+ "\nPoster:" + images + "\n\n\n";
     }
+
+    // Methods return class variables
 
     public String getName() {
         return this.name;

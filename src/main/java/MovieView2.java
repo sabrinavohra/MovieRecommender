@@ -13,13 +13,14 @@ public class MovieView2 extends JFrame {
     public MovieView2() {
         back = new MovieRecommender();
 
+        // Basic settings for screen
         setTitle("Movie Recommender");
         setSize(1024, 825);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Create panel with labels and text fields
+        // Creates panel with labels and text fields
         inputPanel = new JPanel(new GridBagLayout());
         inputPanel.setBackground(Color.LIGHT_GRAY);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -27,7 +28,7 @@ public class MovieView2 extends JFrame {
         gbc.anchor = GridBagConstraints.WEST;
 
 
-        // Genre
+        // Creates genre text box
         gbc.gridx = 0;
         gbc.gridy = 0;
         inputPanel.add(new JLabel("Genre:"), gbc);
@@ -35,7 +36,7 @@ public class MovieView2 extends JFrame {
         genreField = new JTextField(20);
         inputPanel.add(genreField, gbc);
 
-        // Length
+        // Creates length text box
         gbc.gridx = 0;
         gbc.gridy = 1;
         inputPanel.add(new JLabel("Length:"), gbc);
@@ -43,7 +44,7 @@ public class MovieView2 extends JFrame {
         lengthField = new JTextField(20);
         inputPanel.add(lengthField, gbc);
 
-        // Rating
+        // Creates rating text box
         gbc.gridx = 0;
         gbc.gridy = 2;
         inputPanel.add(new JLabel("Rating:"), gbc);
@@ -51,29 +52,27 @@ public class MovieView2 extends JFrame {
         ratingField = new JTextField(20);
         inputPanel.add(ratingField, gbc);
 
-        // GO button
+        // Creates panel on bottom of screen for the button to click to next screen
         goPanel = new JPanel();
         Font a = new Font("Arial", Font.BOLD, 16);
         JButton goButton = new JButton("GO!!");
         goButton.setFont(a);
 
-        goButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String genre = genreField.getText().trim();
-                String length = lengthField.getText().trim();
-                String rating = ratingField.getText().trim();
+        goButton.addActionListener(e -> {
+            String genre = genreField.getText().trim();
+            String length = lengthField.getText().trim();
+            String rating = ratingField.getText().trim();
 
-                if (genre.isEmpty() || length.isEmpty() || rating.isEmpty()) {
-                    JOptionPane.showMessageDialog(
-                            MovieView2.this,
-                            "Please fill in all the fields (Genre, Length, and Rating).",
-                            "Missing Input",
-                            JOptionPane.ERROR_MESSAGE
-                    );
-                } else {
-                    showNextScreen();
-                }
+            // Prints error message pop up, if text boxes are not filled
+            if (genre.isEmpty() || length.isEmpty() || rating.isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        MovieView2.this,
+                        "Please fill in all the fields (Genre, Length, and Rating).",
+                        "Missing Input",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            } else {
+                showNextScreen();
             }
         });
         gbc.gridx = 1;
@@ -91,6 +90,7 @@ public class MovieView2 extends JFrame {
         setVisible(true);
     }
 
+    // Prints the second screen after the user has inputted information
     private void showNextScreen() {
         getContentPane().removeAll();
 
@@ -98,15 +98,12 @@ public class MovieView2 extends JFrame {
         whitePanel.setBackground(Color.LIGHT_GRAY);
         whitePanel.setLayout(new BorderLayout());
 
-        // Create user movie from input fields
-        int length = Integer.parseInt(lengthField.getText().trim());
+        // Creates user movie from input fields to compare using closest()
         String genre = genreField.getText().trim();
-        int budget = 1000;
         Movie userMovie = new Movie(genre, lengthField.getText(), ratingField.getText());
-
         ArrayList<Movie> recommended = MovieRecommender.closest(userMovie);
 
-        // Limit to 3 movies max to avoid layout issues
+        // Limit to 3 movies
         int maxMovies = Math.min(3, recommended.size());
 
         // Create center panel with BoxLayout and spacing
@@ -114,8 +111,10 @@ public class MovieView2 extends JFrame {
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
         centerPanel.setBackground(Color.LIGHT_GRAY);
 
+        // Makes sure movies are correctly spaced
         centerPanel.add(Box.createHorizontalGlue());
 
+        // Sets panel spacing, color, and dimensions for each movie
         for (int i = 0; i < maxMovies; i++) {
             Movie movie = recommended.get(i);
 
@@ -125,7 +124,7 @@ public class MovieView2 extends JFrame {
             moviePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             moviePanel.setMaximumSize(new Dimension(220, 450));
 
-            // Poster
+            // Trys to print poster, if the image is available
             try {
                 if (movie.getImages() != null && !movie.getImages().isEmpty()) {
                     String posterPath = movie.getImages().getFirst().getFilePath();
@@ -142,26 +141,27 @@ public class MovieView2 extends JFrame {
                 moviePanel.add(new JLabel("Error loading image."));
             }
 
+            // Adds all information about movie into the panel
             moviePanel.add(Box.createVerticalStrut(15));
-            moviePanel.add(new JLabel("Title: " + movie.getName()));
-            moviePanel.add(new JLabel("Genre: " + movie.getGenre()));
-            moviePanel.add(new JLabel("Length: " + movie.getLength() + " min"));
-            moviePanel.add(new JLabel("Budget: $" + movie.getBudget()));
-            moviePanel.add(new JLabel("Rating: " + movie.getRating()));
+            moviePanel.add(new JLabel(STR."Title: \{movie.getName()}"));
+            moviePanel.add(new JLabel(STR."Genre: \{movie.getGenre()}"));
+            moviePanel.add(new JLabel(STR."Length: \{movie.getLength()} min"));
+            moviePanel.add(new JLabel(STR."Budget: $\{movie.getBudget()}"));
+            moviePanel.add(new JLabel(STR."Rating: \{movie.getRating()}"));
             moviePanel.add(Box.createVerticalStrut(10));
 
-            // Overview Section
+            // Creates overview section with scrolling text
             JTextArea overviewArea = new JTextArea("Overview:\n" + movie.getOverview());
-            overviewArea.setFont(UIManager.getFont("Label.font")); // Ensure consistent font
+            overviewArea.setFont(UIManager.getFont("Label.font"));
             overviewArea.setLineWrap(true);
             overviewArea.setWrapStyleWord(true);
             overviewArea.setEditable(false);
-            overviewArea.setForeground(Color.BLACK); // Optional: change text color
+            overviewArea.setForeground(Color.BLACK);
             overviewArea.setOpaque(false);
-            overviewArea.setMaximumSize(new Dimension(200, 120)); // Adjust the size as needed
+            overviewArea.setMaximumSize(new Dimension(200, 120));
             overviewArea.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
 
-            // Wrap in JScrollPane for scroll functionality
+            // Wraps for scroll functionality
             JScrollPane overviewScrollPane = new JScrollPane(overviewArea);
             overviewScrollPane.setPreferredSize(new Dimension(200, 100)); // Adjust size as needed
             overviewScrollPane.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
@@ -171,12 +171,13 @@ public class MovieView2 extends JFrame {
 
             centerPanel.add(moviePanel);
 
+            // Ensures movie texts don't run into one another
             if (i < maxMovies - 1) {
-                centerPanel.add(Box.createHorizontalStrut(80)); // adds space between movie panels
+                centerPanel.add(Box.createHorizontalStrut(80));
             }
         }
 
-        // Wrap centerPanel for vertical centering
+        // Creates vertical centering
         JPanel centerWrapper = new JPanel(new GridBagLayout());
         centerWrapper.setBackground(Color.LIGHT_GRAY);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -187,7 +188,7 @@ public class MovieView2 extends JFrame {
 
         whitePanel.add(centerWrapper, BorderLayout.CENTER);
 
-        // SOUTH: Replay button
+        // Creates the replay button at the bottom of the screen
         JPanel bottomPanel = new JPanel();
         bottomPanel.setBackground(Color.LIGHT_GRAY);
         JButton replayButton = new JButton("REPLAY!");
@@ -196,7 +197,7 @@ public class MovieView2 extends JFrame {
         replayButton.setBackground(Color.BLUE);
         replayButton.setForeground(Color.BLACK);
 
-        replayButton.addActionListener(e -> {
+        replayButton.addActionListener(_ -> {
             getContentPane().removeAll();
             genreField.setText("");
             lengthField.setText("");
@@ -214,7 +215,7 @@ public class MovieView2 extends JFrame {
         repaint();
     }
 
-
+    // Runs front end
     public static void main(String[] args) {
         MovieView2 current = new MovieView2();
     }
