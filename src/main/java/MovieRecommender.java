@@ -30,7 +30,7 @@ public class MovieRecommender {
                 "then he starts to fall for her too.");
         MovieView2 view2 = new MovieView2();
         view2.repaint();
-        // Loads all movies
+        // Loads all movies gathered from API
         loadIDs();
     }
 
@@ -67,14 +67,14 @@ public class MovieRecommender {
     public static int editDistance(Movie a, Movie b) {
         int total = 0;
         // Genre has most ability to change edit distance, budget has least, and length has little more than budget
-        if(Math.abs(a.getLength() - b.getLength()) <= 15) {
-            total+=2;
+        if(Math.abs(a.getLength() - b.getLength()) <= 10) {
+            total+=3;
         }
         if(Math.abs(a.getBudget() - b.getBudget()) <= 100) {
             total++;
         }
         if(a.getGenre().equals(b.getGenre())) {
-            total+=5;
+            total++;
         }
         return total;
     }
@@ -84,7 +84,7 @@ public class MovieRecommender {
         // Code inputted from Tmdb API
         TmdbApi tmdbApi = new TmdbApi("eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMDkwNjk5ZGE1ODg4ZGI5MjE1ZGNmMGNhMjgwZDZmYiIsIm5iZiI6MTc0MzE5MjczMi42ODUsInN1YiI6IjY3ZTcwMjljMDkyNTI4NjJlYTc2N2U4NSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Q08Y593tZg-jbJ1WUG5Q5QV4Wc_NeCiZ4nM9x0JHb3A");
         TmdbMovies tmdbMovies = tmdbApi.getMovies();
-        for (int m = 0; m < 50; m++) {
+        for (int m = 0; m < 100; m++) {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=" + m +"&sort_by=popularity.desc"))
                     .header("accept", "application/json")
@@ -122,7 +122,7 @@ public class MovieRecommender {
             for (int i = 0; i < r.length; i++) {
                 MovieDb mov = tmdbMovies.getDetails(Integer.parseInt(r[i]), "en-US", MovieAppendToResponse.IMAGES);
                 List<Artwork> images = mov.getImages().getPosters();
-                Movie n = new Movie(mov.getTitle(), mov.getRuntime(), mov.getBudget(), mov.getGenres().getFirst(), mov.getOverview(), mov.getPopularity(), images);
+                Movie n = new Movie(mov.getTitle(), mov.getRuntime(), mov.getBudget(), mov.getGenres().getFirst(), mov.getOverview(), mov.getPopularity(), images, mov.getReleaseDate());
                 movieList.add(n);
             }
         }

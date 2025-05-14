@@ -10,9 +10,10 @@ public class Movie {
     private String overview;
     private List<Artwork> images;
     private double rating;
+    private String year;
 
     // Constructor used for information given from API
-    public Movie(String name, int length, int budget, Genre genre, String overview, double rating, List<Artwork> poster) {
+    public Movie(String name, int length, int budget, Genre genre, String overview, double rating, List<Artwork> poster, String year) {
         this.name = name;
         this.length = length;
         this.budget = budget;
@@ -20,6 +21,7 @@ public class Movie {
         this.overview = overview;
         this.images = poster;
         this.rating = rating;
+        this.year = year;
     }
 
     // Constructor used for creating test / backup movie
@@ -71,5 +73,9 @@ public class Movie {
 
     public String getOverview() {
         return this.overview;
+    }
+
+    public String getYear() {
+        return this.year;
     }
 }

@@ -146,6 +146,7 @@ public class MovieView2 extends JFrame {
             moviePanel.add(new JLabel(STR."Length: \{movie.getLength()} min"));
             moviePanel.add(new JLabel(STR."Budget: $\{movie.getBudget()}"));
             moviePanel.add(new JLabel(STR."Rating: \{movie.getRating()}"));
+            moviePanel.add(new JLabel(STR."Release Date: \{movie.getYear()}"));
             moviePanel.add(Box.createVerticalStrut(10));
 
             // Creates overview section with scrolling text
