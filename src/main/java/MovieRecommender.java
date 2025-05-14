@@ -11,6 +11,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -35,25 +36,30 @@ public class MovieRecommender {
 
     // Finds the three most similar movies to the user's inputted information
     public static ArrayList<Movie> closest (Movie a) {
-        ArrayList<Movie> topMatches = new ArrayList<>(movieList);
-        // Compares edit distances of movies
-        topMatches.sort((m1, m2) -> Integer.compare(
-                editDistance(a, m2),
-                editDistance(a, m1)
-        ));
+        ArrayList<Movie> topMatches = new ArrayList<>();
+
+        // Filter movies by matching genre
+        for (Movie m : movieList) {
+            if (m.getGenre().equalsIgnoreCase(a.getGenre())) {
+                topMatches.add(m);
+            }
+        }
+
+        // Sort by increasing edit distance (most similar first)
+        topMatches.sort(Comparator.comparingInt(m -> editDistance(a, m)));
 
         ArrayList<Movie> result = new ArrayList<>();
         for (Movie m : topMatches) {
-            if (!result.contains(m)) {
+            if (!result.contains(m) && !m.equals(a)) {
                 result.add(m);
             }
             if (result.size() == 3) break;
         }
 
+        // If not enough genre-matching results, fill with the test movie
         while (result.size() < 3) {
             result.add(test);
         }
-        // Returns ArrayList of the three most similar movies after comparing
         return result;
     }
 

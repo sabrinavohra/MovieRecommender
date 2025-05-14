@@ -37,7 +37,7 @@ public class MovieView2 extends JFrame {
         // Creates length text box
         gbc.gridx = 0;
         gbc.gridy = 1;
-        inputPanel.add(new JLabel("Length:"), gbc);
+        inputPanel.add(new JLabel("Length (in minutes):"), gbc);
         gbc.gridx = 1;
         lengthField = new JTextField(20);
         inputPanel.add(lengthField, gbc);
@@ -45,7 +45,7 @@ public class MovieView2 extends JFrame {
         // Creates rating text box
         gbc.gridx = 0;
         gbc.gridy = 2;
-        inputPanel.add(new JLabel("Rating:"), gbc);
+        inputPanel.add(new JLabel("Rating (1 - 500):"), gbc);
         gbc.gridx = 1;
         ratingField = new JTextField(20);
         inputPanel.add(ratingField, gbc);
